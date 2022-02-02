@@ -6,10 +6,11 @@ const description = document.querySelector(".description");
 const following = document.querySelector("#following");
 const followers = document.querySelector("#followers");
 const repositorios = document.querySelector("#repos");
-const githubUser = document.querySelector("#github-user");
-const twitterUser = document.querySelector("#twiter-user");
-const locationUser = document.querySelector("#location");
-const site = document.querySelector("#site");
+const githubUser = document.querySelector(".github");
+const twitterUser = document.querySelector(".twiter");
+const locationUser = document.querySelector(".location");
+const site = document.querySelector(".site");
+const resultSearch = document.querySelector(".result-search");
 
 async function dataFind(){
 
@@ -34,6 +35,7 @@ async function dataFind(){
             //Requisição Success
             else{
                 loadUser(response)
+                showResult();
             }
         }
         
@@ -45,6 +47,7 @@ async function dataFind(){
 function loadUser(response){
     let dateBase = response.created_at;
     let date = new Date(dateBase).toLocaleDateString('pt-BR');
+
     console.log(response);
 
     profile.src = response.avatar_url; 
@@ -59,34 +62,85 @@ function loadUser(response){
     followers.textContent = response.followers || 0;
     repositorios.textContent = response.public_repos || 0;
 
-    if(response.html_url === null)  githubUser.classList.add("notAvailable");
-    if(response.twitter_username === null)  twitterUser.classList.add("notAvailable");
-    if(response.location === null) locationUser.classList.add("notAvailable");
-    if(response.blog === "") site.classList.add("notAvailable");
 
-    githubUser.href = response.html_url;
-    githubUser.textContent = response.html_url || 'Não informado';
+    if(response.html_url === null){
+        githubUser.classList.add("notAvailable")
+        githubUser.textContent = 'Não informado';
 
-    twitterUser.innerText = response.twitter_username === null ? 'Não informado' : `@${response.twitter_username}`;
-    locationUser.innerText = response.location || 'Não informado';
+    }
+    else{
+        githubUser.href = response.html_url;
+        githubUser.textContent = response.html_url;
+        githubUser.classList.remove("notAvailable")
 
-    site.innerText = response.blog || 'Não informado';
-    site.href = response.blog;
+    }
 
+    if(response.twitter_username === null){
+        twitterUser.textContent = 'Não informado';
+        twitterUser.classList.add("notAvailable");
+        
+    }
+    else{
+        twitterUser.textContent = response.twitter_username === null ? 'Não informado' : `@${response.twitter_username}`;
+        twitterUser.classList.remove("notAvailable")
+
+    }
+
+    if(response.location === null){
+        locationUser.textContent = 'Não informado';
+        locationUser.classList.add("notAvailable");
+    }
+    else{
+        locationUser.textContent = response.location;
+        locationUser.classList.remove("notAvailable")
+    }
+
+    if(response.blog === ""){
+        site.classList.add("notAvailable");
+        site.textContent = 'Não informado';
+    }
+    else{
+        site.textContent = response.blog || 'Não informado';
+        site.href = response.blog;
+        site.classList.remove("notAvailable");
+
+    }
+}
+function alternateMode(){
+    const icon = document.querySelector("header .icons-mode i");
+
+    icon.addEventListener("click", e=>{
+        document.body.classList.toggle("alternate")
+    })
+}
+function init(){
+    //Focar no input ao iniciar
+    const inputSearch = document.querySelector("#search-input");
+
+    inputSearch.focus();
+
+    //Quando clicar no enter -> ativar botão
+    document.addEventListener("keypress", e =>{
+        if(e.key == 'Enter'){
+            dataFind() 
+            inputSearch.value = '';
+        }
+    })
+    //QUando clicar no botão
+    document.querySelector("#search").addEventListener("click", e=> {
+        dataFind() 
+        inputSearch.focus();
+        inputSearch.value = '';
+    })
+
+    alternateMode()
 
 }
-const inputSearch = document.querySelector("#search-input");
-inputSearch.focus();
+function showResult(){
+    resultSearch.classList.add("active");
+}
+init();
 
-document.addEventListener("keypress", e =>{
-    if(e.key == 'Enter'){
-        dataFind() 
-        inputSearch.value = '';
-    }
-})
 
-document.querySelector("#search").addEventListener("click", e=> {
-    dataFind() 
-    inputSearch.focus();
-    inputSearch.value = '';
-})
+
+

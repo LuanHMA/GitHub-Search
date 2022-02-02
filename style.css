@@ -7,13 +7,13 @@ p,h1,h2{
     margin: 0;
 }
 h1{
-    font-size: 24px;
+    font-size: 22px;
 }
 h2{
     font-size: 20px;
 }
-p,a{
-    font-size: 18px;
+p,a,input,input::placeholder{
+    font-size: 16px;
 }
 html{
     --darkBackground: #141C2F;
@@ -25,36 +25,61 @@ body{
     height: 100vh;
     display: grid;
     place-items: center;
+    font-family: 'Roboto Mono', monospace;
+    transition: 0.3s ease;
 }
 .container{
     max-width: 770px;
     min-width: 400px;
     width: 70%;
     padding: 10px 15px;
+    margin-top: 2rem;
 }
+main{
+    margin-bottom: 2rem;
+}
+
 /* === HEADER === */
 header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 2rem .4rem;
+    margin: 0 .4rem 2rem .4rem;
 }
 header .logo h1{
-    font-size: 25px;
+    font-size: 28px;
+    font-weight: 700;
 }
 header .icons-mode i {
-    font-size: 18px;
+    font-size: 22px;
     cursor: pointer;
 }
 a{
     text-decoration: none;
     color: #0A5DD5;
 }
-/* ======== MAIN ========== */
-.notAvailable{
-    color: rgb(175, 175, 175);
-    pointer-events: none;
+/* ======= Alternate Mode ====== */
+.alternate{
+    background: #F1F3FF;
+    color: rgb(50 50 50);
 }
+.alternate .container header .logo h1{
+    color: rgb(50 50 50);
+    text-shadow: 2px 2px #d3d3d3;
+}
+.alternate main .search-bar,
+.alternate main .result-search{
+    background: #fff;
+    box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 1px 3px 1px;
+}
+.alternate .search-bar label input{
+    background: #fff;
+    color: rgb(50 50 50);
+}
+.alternate .info-field{
+    background:#f1f3ff;
+}
+/* ======== MAIN ========== */
 
 /* === Search Bar === */
 .search-bar{
@@ -76,7 +101,7 @@ a{
     outline: none;
     border: none;
     color: #Fff;
-    font-size: 18px;
+    font-size: 16px;
     margin-left: 5px;
 }
 .search-bar label input::placeholder{
@@ -86,9 +111,11 @@ a{
     color: #0A5DD5;
     font-size: 18px;
 }
-
-/* === Result Search === */
+/* ===== View Result Search ===== */
 .result-search{
+    opacity: 0;
+    transform: scale(0.4);
+
     background: var(--darkContainer);
     border-radius: 15px;
     margin-top: 1.4rem;
@@ -102,6 +129,20 @@ a{
         'img info'
         'img details';
 }
+.result-search.active{
+    animation: showResult forwards .5s ease normal;
+}
+
+@keyframes showResult {
+    to{
+        opacity: 1;
+        transform: scale(1);
+        
+    }
+}
+
+/* === Result Search === */
+
 .img-field{
     grid-area: img;
     text-align:center;
@@ -109,7 +150,6 @@ a{
 .img-field img{
     width: 150px;
     border-radius: 50%;
-    border: 2px solid #000;
 }
 /* == Profile == */
 .profile-field{
@@ -122,19 +162,22 @@ a{
 .bio-user{
     color: #337deb;
 }
+.name-user{
+    font-weight: bold;
+}
 /* == Description == */
 .description-field{
     grid-area: desc
 }
 .description {
-    word-break: break-all;
+    word-break: break-word;
     font-weight: 600;
 }
 /* == Info ==  */
 .info-field{
     display: flex;
     justify-content:space-between;
-    padding: 1.3rem;
+    padding: .8rem;
     background: var(--darkBackground);
     border-radius: 15px;
     grid-area: info;
@@ -166,6 +209,12 @@ a{
     margin: 10px auto;
     width: 90%;
 }
+.notAvailable{
+    color: rgb(175, 175, 175);
+    pointer-events: none;
+}
+
+
 
 @media(max-width: 1024px){
     .result-search{
@@ -200,5 +249,8 @@ a{
     }
     .search-bar label input{
         font-size: 16px;
+    }
+    .repo-number{
+        align-items:center;
     }
 }
