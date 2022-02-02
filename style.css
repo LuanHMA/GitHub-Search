@@ -27,6 +27,7 @@ body{
     place-items: center;
     font-family: 'Roboto Mono', monospace;
     transition: 0.3s ease;
+    overflow-x: hidden;
 }
 .container{
     max-width: 770px;
